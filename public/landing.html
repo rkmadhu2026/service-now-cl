@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Relayroom — Incident response for ServiceNow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #0b1220;
+        --card: rgba(255,255,255,0.08);
+        --card2: rgba(255,255,255,0.06);
+        --border: rgba(255,255,255,0.16);
+        --text: #eef6ff;
+        --muted: #b5c9e3;
+        --accent: #2fe3c5;
+        --accent2: #8ab4ff;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Manrope", system-ui, -apple-system, Segoe UI, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(900px 400px at 15% 0%, rgba(138,180,255,0.25), transparent 60%),
+          radial-gradient(800px 460px at 90% -10%, rgba(47,227,197,0.22), transparent 60%),
+          radial-gradient(600px 360px at 30% 110%, rgba(196,181,253,0.16), transparent 55%),
+          var(--bg);
+      }
+      .wrap { max-width: 1100px; margin: 0 auto; padding: 30px 22px 44px; }
+      .nav { display:flex; justify-content: space-between; align-items:center; gap:12px; }
+      .logo { font-weight: 900; letter-spacing: 0.02em; }
+      .nav a { color: var(--text); text-decoration: none; font-weight: 800; opacity: 0.92; }
+      .nav .right { display:flex; gap:10px; align-items:center; }
+      .btn { padding: 10px 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--card2); }
+      .btn.primary { background: linear-gradient(135deg, rgba(47,227,197,0.22), rgba(138,180,255,0.18)); border-color: rgba(47,227,197,0.35); }
+      .hero { margin-top: 26px; display:grid; grid-template-columns: 1.2fr 1fr; gap: 16px; }
+      .h1 { font-size: 44px; line-height: 1.02; letter-spacing: -0.03em; font-weight: 900; margin: 0; }
+      .sub { margin-top: 14px; color: var(--muted); font-size: 16px; line-height: 1.5; }
+      .cta { margin-top: 16px; display:flex; gap:10px; flex-wrap: wrap; }
+      .pill { display:inline-flex; gap:8px; align-items:center; padding: 8px 10px; border-radius: 999px; border: 1px solid var(--border); background: var(--card2); color: var(--muted); font-weight: 800; font-size: 12px; }
+      .card { border: 1px solid var(--border); background: var(--card); border-radius: 16px; padding: 16px; }
+      .card h3 { margin: 0; font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; color: rgba(238,246,255,0.88); }
+      .card p { margin: 10px 0 0; color: var(--muted); }
+      .grid { margin-top: 16px; display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; }
+      .list { margin: 10px 0 0; padding-left: 16px; color: var(--muted); }
+      .footer { margin-top: 22px; color: rgba(181,201,227,0.85); font-size: 13px; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+      @media (max-width: 900px) { .hero { grid-template-columns: 1fr; } .h1 { font-size: 38px; } .grid { grid-template-columns: 1fr; } }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="nav">
+        <div class="logo">Relayroom</div>
+        <div class="right">
+          <a class="btn" href="/app">Open console</a>
+          <a class="btn primary" href="/auth">Create workspace</a>
+        </div>
+      </div>
+
+      <section class="hero">
+        <div>
+          <h1 class="h1">ServiceNow records the incident.<br />Relayroom runs it.</h1>
+          <p class="sub">
+            Relayroom turns Sev‑1 tickets into a structured response room across ServiceNow + Slack/Teams—roles, timeline, decisions, and stakeholder updates—without replacing the system your enterprise already bought.
+          </p>
+          <div class="cta">
+            <a class="btn primary" href="/auth">Sign up</a>
+            <a class="btn" href="/auth">Sign in</a>
+            <a class="btn" href="/app">View demo app</a>
+          </div>
+          <div style="margin-top: 14px; display:flex; gap:8px; flex-wrap: wrap;">
+            <span class="pill">ServiceNow webhook</span>
+            <span class="pill">Slack events</span>
+            <span class="pill">Role nudges</span>
+            <span class="pill">Post‑incident package</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>What this demo includes</h3>
+          <p>
+            A working local MVP: multi‑tenant API, signed webhooks, incident queue, and a console UI.
+          </p>
+          <ul class="list">
+            <li>Auth (tenant + token) via <span class="mono">/auth</span></li>
+            <li>Incident console via <span class="mono">/app</span></li>
+            <li>Health endpoint <span class="mono">/health</span></li>
+          </ul>
+          <p class="footer">Next upgrade: real users + SSO (SAML/OIDC) and Microsoft Teams orchestration.</p>
+        </div>
+      </section>
+
+      <section class="grid">
+        <div class="card">
+          <h3>Incident room orchestration</h3>
+          <p>When severity crosses threshold, Relayroom creates a room, assigns roles, and starts the operating cadence.</p>
+        </div>
+        <div class="card">
+          <h3>Live timeline + decisions</h3>
+          <p>Capture what happened and why—without reconstructing reality from chat scrollback later.</p>
+        </div>
+        <div class="card">
+          <h3>Exec-ready updates</h3>
+          <p>Same facts, different audience. Relayroom produces stakeholder-safe updates without turning engineers into a status API.</p>
+        </div>
+      </section>
+
+      <div class="footer">© Relayroom demo • Local-only • No production security claims.</div>
+    </div>
+  </body>
+</html>
+

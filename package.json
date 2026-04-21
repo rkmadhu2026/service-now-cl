@@ -1,0 +1,41 @@
+{
+  "name": "relayroom-mvp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "prisma:generate": "node node_modules/prisma/build/index.js generate",
+    "prisma:migrate": "node node_modules/prisma/build/index.js migrate deploy",
+    "prisma:push": "node node_modules/prisma/build/index.js db push",
+    "prisma:seed": "tsx prisma/seed.ts",
+    "setup:local": "npm run db:up && npm run prisma:generate && npm run prisma:migrate && npm run prisma:seed"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.6.0",
+    "bullmq": "^5.48.1",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "ioredis": "^5.4.1",
+    "jsonwebtoken": "^9.0.3",
+    "uuid": "^11.1.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.1",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/node": "^22.13.10",
+    "@types/supertest": "^6.0.3",
+    "prisma": "^6.6.0",
+    "supertest": "^7.0.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.8"
+  }
+}

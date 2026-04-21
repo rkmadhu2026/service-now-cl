@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Relayroom — Sign in</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #eef3f8;
+        --surface: #ffffff;
+        --border: #d6e2ef;
+        --text: #10233a;
+        --muted: #62778f;
+        --brand: #0a66c2;
+        --brand-soft: #e8f2fd;
+        --ok: #0f7a42;
+        --warn: #c97b00;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Manrope", sans-serif;
+        background:
+          radial-gradient(circle at 10% -20%, #d9ecff 0%, transparent 40%),
+          radial-gradient(circle at 90% -10%, #f6e8ff 0%, transparent 35%),
+          var(--bg);
+        color: var(--text);
+      }
+      .wrap { max-width: 980px; margin: 0 auto; padding: 26px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; }
+      .hero { padding: 18px; border-radius: 16px; background: linear-gradient(135deg, #0e2f52, #1f5d98 65%, #2f7ed1); color: #fff; border: 1px solid rgba(255,255,255,0.18); }
+      .hero h1 { margin: 0; font-size: 26px; font-weight: 800; }
+      .hero p { margin: 10px 0 0; color: #daebff; }
+      .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px; }
+      .tabs { display: flex; gap: 8px; margin-bottom: 12px; }
+      .tab { flex: 1; border: 1px solid var(--border); background: #fff; border-radius: 12px; padding: 10px; font-weight: 800; cursor: pointer; }
+      .tab.active { background: var(--brand-soft); border-color: #9cc9f6; color: #0b4f95; }
+      label { display: block; font-size: 12px; color: var(--muted); font-weight: 700; margin-top: 10px; }
+      input { width: 100%; border: 1px solid #c9d8e7; border-radius: 12px; padding: 10px; margin-top: 6px; font-family: "Manrope", sans-serif; }
+      .btn { margin-top: 12px; width: 100%; border-radius: 12px; border: 1px solid #abcff4; background: var(--brand); color: #fff; padding: 10px; font-weight: 900; cursor: pointer; }
+      .muted { color: var(--muted); font-size: 13px; }
+      code { font-family: "IBM Plex Mono", monospace; background: #f0f6ff; border-radius: 8px; padding: 2px 6px; color: #0f4d90; }
+      .state { margin-top: 10px; font-size: 13px; }
+      .ok { color: var(--ok); }
+      .warn { color: var(--warn); }
+      a { color: #0b4f95; }
+      @media (max-width: 860px) { .wrap { grid-template-columns: 1fr; } }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <section class="hero">
+        <h1>Relayroom</h1>
+        <p>Sign in to the incident command console. If you’re new, create your workspace in 30 seconds.</p>
+        <p class="muted">Back to <a style="color:#fff; text-decoration: underline" href="/">landing</a>.</p>
+      </section>
+
+      <section class="card">
+        <div class="tabs">
+          <button class="tab active" id="tabSignup">Sign up</button>
+          <button class="tab" id="tabSignin">Sign in</button>
+        </div>
+
+        <div id="signupForm">
+          <label for="orgName">Organization name</label>
+          <input id="orgName" placeholder="Acme Corp — IT Operations" />
+
+          <label for="signupEmail">Your email</label>
+          <input id="signupEmail" placeholder="you@company.com" />
+
+          <button class="btn" id="signupBtn">Create workspace</button>
+          <div class="state muted" id="signupState"></div>
+          <p class="muted">This demo uses tenant+token (no password yet). You can replace with real SSO later.</p>
+        </div>
+
+        <div id="signinForm" style="display:none">
+          <label for="tenantId">Tenant ID</label>
+          <input id="tenantId" placeholder="Paste tenant UUID here" />
+
+          <label for="signinEmail">Your email</label>
+          <input id="signinEmail" placeholder="you@company.com" />
+
+          <button class="btn" id="signinBtn">Sign in</button>
+          <div class="state muted" id="signinState"></div>
+        </div>
+      </section>
+    </div>
+
+    <script type="module">
+      const tabSignup = document.getElementById("tabSignup");
+      const tabSignin = document.getElementById("tabSignin");
+      const signupForm = document.getElementById("signupForm");
+      const signinForm = document.getElementById("signinForm");
+
+      const orgName = document.getElementById("orgName");
+      const signupEmail = document.getElementById("signupEmail");
+      const signupBtn = document.getElementById("signupBtn");
+      const signupState = document.getElementById("signupState");
+
+      const tenantId = document.getElementById("tenantId");
+      const signinEmail = document.getElementById("signinEmail");
+      const signinBtn = document.getElementById("signinBtn");
+      const signinState = document.getElementById("signinState");
+
+      function show(tab) {
+        if (tab === "signup") {
+          tabSignup.classList.add("active");
+          tabSignin.classList.remove("active");
+          signupForm.style.display = "";
+          signinForm.style.display = "none";
+        } else {
+          tabSignin.classList.add("active");
+          tabSignup.classList.remove("active");
+          signupForm.style.display = "none";
+          signinForm.style.display = "";
+        }
+      }
+
+      tabSignup.onclick = () => show("signup");
+      tabSignin.onclick = () => show("signin");
+
+      async function issueToken(tenantIdValue, subject) {
+        const res = await fetch("/api/auth/token", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ subject, tenantId: tenantIdValue, role: "commander" })
+        });
+        if (!res.ok) throw new Error("Token failed");
+        const data = await res.json();
+        return data.token;
+      }
+
+      signupBtn.onclick = async () => {
+        signupState.textContent = "Creating workspace...";
+        signupState.className = "state muted";
+        try {
+          const name = (orgName.value || "").trim() || "Relayroom Demo Co";
+          const email = (signupEmail.value || "").trim() || "demo.user@relayroom.dev";
+          const tenantRes = await fetch("/api/tenants", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ name })
+          });
+          if (!tenantRes.ok) throw new Error("Tenant create failed");
+          const tenant = await tenantRes.json();
+          const token = await issueToken(tenant.id, email);
+          localStorage.setItem("relayroomTenantId", tenant.id);
+          localStorage.setItem("relayroomToken", token);
+          signupState.innerHTML = `<span class="ok">Workspace created.</span> Tenant ID: <code>${tenant.id}</code>. Redirecting…`;
+          setTimeout(() => (window.location.href = "/app"), 600);
+        } catch (e) {
+          signupState.textContent = "Signup failed. Check server is running.";
+          signupState.className = "state warn";
+        }
+      };
+
+      signinBtn.onclick = async () => {
+        signinState.textContent = "Signing in...";
+        signinState.className = "state muted";
+        try {
+          const tid = (tenantId.value || "").trim();
+          const email = (signinEmail.value || "").trim() || "demo.user@relayroom.dev";
+          if (!tid) throw new Error("Missing tenant id");
+          const token = await issueToken(tid, email);
+          localStorage.setItem("relayroomTenantId", tid);
+          localStorage.setItem("relayroomToken", token);
+          signinState.innerHTML = `<span class="ok">Signed in.</span> Redirecting…`;
+          setTimeout(() => (window.location.href = "/app"), 500);
+        } catch {
+          signinState.textContent = "Sign in failed. Check Tenant ID and server.";
+          signinState.className = "state warn";
+        }
+      };
+    </script>
+  </body>
+</html>
+

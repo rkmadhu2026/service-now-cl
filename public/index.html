@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="refresh" content="0; url=/" />
+    <title>Relayroom</title>
+  </head>
+  <body>
+    <p>Redirecting…</p>
+  </body>
+</html>
+
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Manrope", sans-serif;
+        background:
+          radial-gradient(circle at 10% -20%, #d9ecff 0%, transparent 40%),
+          radial-gradient(circle at 90% -10%, #f6e8ff 0%, transparent 35%),
+          var(--bg);
+        color: var(--text);
+      }
+
+      .shell {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 22px;
+      }
+
+      .topbar {
+        background: linear-gradient(135deg, #0e2f52, #1f5d98 65%, #2f7ed1);
+        color: #fff;
+        border-radius: 16px;
+        padding: 18px 20px;
+        box-shadow: 0 10px 35px rgba(16, 35, 58, 0.2);
+      }
+
+      .topbar h1 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 800;
+        letter-spacing: 0.01em;
+      }
+
+      .topbar p {
+        margin: 8px 0 0;
+        color: #daebff;
+      }
+
+      .grid {
+        margin-top: 14px;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .kpi {
+        background: rgba(255, 255, 255, 0.13);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 12px;
+        padding: 10px;
+      }
+
+      .kpi .label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #c8e3ff;
+      }
+
+      .kpi .value {
+        margin-top: 6px;
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .layout {
+        margin-top: 14px;
+        display: grid;
+        grid-template-columns: 210px 1fr;
+        gap: 12px;
+      }
+
+      .panel {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 14px;
+      }
+
+      .navTitle {
+        margin: 0 0 8px;
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .nav button {
+        width: 100%;
+        text-align: left;
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--text);
+        border-radius: 10px;
+        margin-bottom: 8px;
+        padding: 10px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .nav button.active {
+        background: var(--brand-soft);
+        border-color: #9cc9f6;
+        color: #0b4f95;
+      }
+
+      .content {
+        display: grid;
+        grid-template-columns: 360px 1fr;
+        gap: 12px;
+      }
+
+      .toolbar {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+      }
+
+      input, select {
+        flex: 1;
+        min-width: 120px;
+        border: 1px solid #c9d8e7;
+        border-radius: 10px;
+        padding: 9px 10px;
+        font-family: "Manrope", sans-serif;
+      }
+
+      .btn {
+        border: 1px solid #abcff4;
+        background: var(--brand-soft);
+        color: #0d4d90;
+        border-radius: 10px;
+        padding: 9px 12px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .btn.primary {
+        background: var(--brand);
+        border-color: var(--brand);
+        color: #fff;
+      }
+
+      .queue {
+        max-height: 620px;
+        overflow: auto;
+      }
+
+      .incidentItem {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: var(--surface-soft);
+        padding: 10px;
+        margin-bottom: 8px;
+        cursor: pointer;
+      }
+
+      .incidentItem.active {
+        background: #eef6ff;
+        border-color: #86bbee;
+        box-shadow: 0 0 0 2px #d8eafd inset;
+      }
+
+      .incidentTitle {
+        font-weight: 700;
+        font-size: 14px;
+      }
+
+      .meta {
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .badge {
+        display: inline-block;
+        border-radius: 999px;
+        padding: 3px 9px;
+        font-size: 11px;
+        font-weight: 800;
+        margin-right: 6px;
+      }
+
+      .sev1 { background: #fde8e8; color: var(--danger); }
+      .sev2 { background: #fff2db; color: var(--warn); }
+      .sev3 { background: #e7f7ee; color: var(--ok); }
+      .phase { background: #e8f1ff; color: #245ea2; }
+
+      .detail {
+        max-height: 620px;
+        overflow: auto;
+      }
+
+      .card {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: #fff;
+        padding: 12px;
+        margin-bottom: 10px;
+      }
+
+      .card h3 {
+        margin: 0 0 8px;
+        font-size: 14px;
+        letter-spacing: 0.02em;
+      }
+
+      .row {
+        margin-top: 6px;
+        font-size: 13px;
+      }
+
+      .label {
+        color: var(--muted);
+        font-weight: 600;
+      }
+
+      code {
+        font-family: "IBM Plex Mono", monospace;
+        color: #0f4d90;
+        background: #f0f6ff;
+        border-radius: 6px;
+        padding: 1px 6px;
+      }
+
+      .state-ok { color: var(--ok); }
+      .state-warn { color: var(--warn); }
+      .muted { color: var(--muted); }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <section class="topbar">
+        <h1>Relayroom Incident Command Console</h1>
+        <p>ServiceNow-aligned response workspace for DevOps, NOC, Service Desk, and stakeholder communication.</p>
+        <div class="grid">
+          <div class="kpi"><div class="label">Organization</div><div class="value">Relayroom Demo Operations</div></div>
+          <div class="kpi"><div class="label">Business Unit</div><div class="value">Digital Payments Platform</div></div>
+          <div class="kpi"><div class="label">Integrated Now</div><div class="value">ServiceNow, Slack, Postgres, Redis</div></div>
+          <div class="kpi"><div class="label">Execution Surface</div><div class="value">Incident, Timeline, Action Center</div></div>
+        </div>
+      </section>
+
+      <div class="layout">
+        <aside class="panel nav">
+          <div class="navTitle">Workspace</div>
+          <button data-tab="overview" class="active">Overview</button>
+          <button data-tab="incidents">Incidents</button>
+          <button data-tab="timeline">Timeline</button>
+          <button data-tab="recommendations">Recommendations</button>
+          <div class="row muted">Active tab: <strong id="activeTab">Overview</strong></div>
+          <hr />
+          <div class="navTitle">Setup</div>
+          <button id="createTenant" class="btn">Create Demo Tenant</button>
+          <button id="triggerSev1" class="btn primary">Trigger Sev-1</button>
+          <button id="refreshPanel" class="btn">Refresh</button>
+          <div id="tenantState" class="row muted">No tenant yet.</div>
+          <div id="authState" class="row muted">No token yet.</div>
+          <div id="actionState" class="row muted">Waiting for action.</div>
+        </aside>
+
+        <main class="panel">
+          <div class="content">
+            <section>
+              <div class="toolbar">
+                <input id="searchInput" placeholder="Search incidents, service, or ticket" aria-label="Search incidents" />
+                <select id="severityFilter" aria-label="Filter by severity">
+                  <option value="">All severities</option>
+                  <option value="sev1">SEV1</option>
+                  <option value="sev2">SEV2</option>
+                  <option value="sev3">SEV3</option>
+                </select>
+              </div>
+              <div class="queue" id="list"></div>
+            </section>
+
+            <section class="detail" id="detailPanel">
+              <div class="card muted">Select an incident from the queue to open full investigation detail and action center.</div>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script type="module">
+      let tenantId = localStorage.getItem("relayroomTenantId") || "";
+      let token = localStorage.getItem("relayroomToken") || "";
+      let selectedIncidentId = "";
+      let incidentCache = [];
+
+      const tenantState = document.getElementById("tenantState");
+      const authState = document.getElementById("authState");
+      const actionState = document.getElementById("actionState");
+      const list = document.getElementById("list");
+      const detailPanel = document.getElementById("detailPanel");
+      const activeTab = document.getElementById("activeTab");
+      const searchInput = document.getElementById("searchInput");
+      const severityFilter = document.getElementById("severityFilter");
+
+      const orgName = "Relayroom Demo Operations";
+      const clientName = "Digital Payments Platform";
+      const serviceNowSecret = "servicenow-dev-secret";
+      const headers = () => ({ "content-type": "application/json", authorization: `Bearer ${token}` });
+
+      function describeService(service) {
+        const map = {
+          "payments-api": {
+            appName: "Payments Application",
+            businessImpact: "Customers may face slow or failed checkout payments.",
+            devopsAction: "Validate API latency, DB connection pool, and rollback status.",
+            stakeholderUpdate: "Payment transactions are degraded; mitigation is in progress."
+          }
+        };
+        return map[service] || {
+          appName: service,
+          businessImpact: "Business impact assessment in progress.",
+          devopsAction: "Validate logs, health checks, and owner assignment.",
+          stakeholderUpdate: "Investigation is ongoing."
+        };
+      }
+
+      async function sha256HmacHex(secret, text) {
+        const enc = new TextEncoder();
+        const key = await crypto.subtle.importKey("raw", enc.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+        const sig = await crypto.subtle.sign("HMAC", key, enc.encode(text));
+        return [...new Uint8Array(sig)].map((b) => b.toString(16).padStart(2, "0")).join("");
+      }
+
+      function setAction(message, kind = "muted") {
+        actionState.textContent = message;
+        actionState.className = `row ${kind === "ok" ? "state-ok" : kind === "warn" ? "state-warn" : "muted"}`;
+      }
+
+      function renderTenant() {
+        tenantState.textContent = tenantId ? `Tenant ID: ${tenantId}` : "No tenant yet.";
+        tenantState.className = tenantId ? "row state-ok" : "row state-warn";
+        authState.textContent = token ? "Auth token ready." : "No auth token.";
+        authState.className = token ? "row state-ok" : "row state-warn";
+      }
+
+      async function issueToken() {
+        const res = await fetch("/api/auth/token", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ subject: "demo.user", tenantId, role: "commander" })
+        });
+        if (!res.ok) throw new Error("Token creation failed.");
+        const data = await res.json();
+        token = data.token;
+        localStorage.setItem("relayroomToken", token);
+      }
+
+      async function createTenant() {
+        setAction("Creating demo tenant...");
+        const res = await fetch("/api/tenants", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ name: "Relayroom Demo Co" })
+        });
+        if (!res.ok) return setAction("Tenant creation failed.", "warn");
+        const data = await res.json();
+        tenantId = data.id;
+        localStorage.setItem("relayroomTenantId", tenantId);
+        await issueToken();
+        renderTenant();
+        setAction("Tenant and token created.", "ok");
+      }
+
+      async function triggerSev1() {
+        if (!tenantId) return alert("Create tenant first.");
+        if (!token) return alert("Token missing. Create tenant again.");
+        setAction("Triggering Sev-1 incident...");
+
+        const externalId = "INC" + Math.floor(Math.random() * 100000);
+        const payload = {
+          externalId,
+          title: `Database latency spike ${externalId}`,
+          service: "payments-api",
+          severity: "sev1",
+          phase: "investigating"
+        };
+        const raw = JSON.stringify(payload);
+        const signature = await sha256HmacHex(serviceNowSecret, raw);
+
+        const res = await fetch("/api/webhooks/servicenow/incidents", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            "x-tenant-id": tenantId,
+            "x-relayroom-signature": signature
+          },
+          body: raw
+        });
+
+        if (!res.ok) return setAction("Failed to trigger Sev-1.", "warn");
+        setAction(`Sev-1 created: ${externalId}`, "ok");
+        await refresh();
+      }
+
+      async function refresh() {
+        if (!tenantId || !token) return;
+        const res = await fetch("/api/incidents", { headers: headers() });
+        if (!res.ok) return setAction("Could not load incidents. Recreate tenant.", "warn");
+        const data = await res.json();
+        incidentCache = data.items || [];
+        renderQueue();
+      }
+
+      function renderQueue() {
+        list.innerHTML = "";
+        const query = searchInput.value.trim().toLowerCase();
+        const sev = severityFilter.value;
+
+        const filtered = incidentCache.filter((incident) => {
+          const matchQuery =
+            !query ||
+            incident.title.toLowerCase().includes(query) ||
+            incident.service.toLowerCase().includes(query) ||
+            incident.externalId.toLowerCase().includes(query);
+          const matchSeverity = !sev || incident.severity === sev;
+          return matchQuery && matchSeverity;
+        });
+
+        if (!filtered.length) {
+          list.innerHTML = `<div class="card muted">No incidents found. Trigger a Sev-1 to start.</div>`;
+          return;
+        }
+
+        filtered.forEach((incident) => {
+          const item = document.createElement("div");
+          item.className = `incidentItem ${selectedIncidentId === incident.id ? "active" : ""}`;
+          item.innerHTML = `
+            <div class="incidentTitle">${incident.title}</div>
+            <div class="row">
+              <span class="badge ${incident.severity}">${incident.severity.toUpperCase()}</span>
+              <span class="badge phase">${incident.phase}</span>
+            </div>
+            <div class="meta">${incident.service} • ${incident.externalId}</div>
+          `;
+          item.onclick = () => openIncident(incident.id);
+          list.appendChild(item);
+        });
+      }
+
+      async function openIncident(incidentId) {
+        selectedIncidentId = incidentId;
+        renderQueue();
+        detailPanel.innerHTML = `<div class="card muted">Loading incident details...</div>`;
+
+        const res = await fetch(`/api/incidents/${incidentId}`, { headers: headers() });
+        if (!res.ok) {
+          detailPanel.innerHTML = `<div class="card state-warn">Unable to load incident details.</div>`;
+          return;
+        }
+
+        const payload = await res.json();
+        const incident = payload.incident;
+        const details = describeService(incident.service);
+        const timelineCount = payload.timeline?.length ?? 0;
+        const decisionCount = payload.decisions?.length ?? 0;
+        const updateCount = payload.updates?.length ?? 0;
+        const artifactReady = payload.artifact ? "Yes" : "No";
+        const latestTimeline = payload.timeline?.[timelineCount - 1]?.message ?? "No timeline events yet.";
+
+        detailPanel.innerHTML = `
+          <div class="card">
+            <h3>Incident Profile</h3>
+            <div class="row"><span class="badge ${incident.severity}">${incident.severity.toUpperCase()}</span><span class="badge phase">${incident.phase}</span></div>
+            <div class="row"><span class="label">Title:</span> ${incident.title}</div>
+            <div class="row"><span class="label">Application:</span> ${details.appName}</div>
+            <div class="row"><span class="label">Organization:</span> ${orgName}</div>
+            <div class="row"><span class="label">Business Unit:</span> ${clientName}</div>
+            <div class="row"><span class="label">ServiceNow Ticket:</span> ${incident.externalId}</div>
+            <div class="row"><span class="label">Response Room:</span> ${incident.roomId || "Pending creation"}</div>
+            <div class="row"><span class="label">Internal Incident ID:</span> <code>${incident.id}</code></div>
+          </div>
+
+          <div class="card">
+            <h3>Action Center</h3>
+            <div class="row"><span class="label">Business Impact:</span> ${details.businessImpact}</div>
+            <div class="row"><span class="label">DevOps Next Action:</span> ${details.devopsAction}</div>
+            <div class="row"><span class="label">Stakeholder Update:</span> ${details.stakeholderUpdate}</div>
+          </div>
+
+          <div class="card">
+            <h3>Evidence Summary</h3>
+            <div class="row"><span class="label">Timeline Events:</span> ${timelineCount}</div>
+            <div class="row"><span class="label">Decisions Captured:</span> ${decisionCount}</div>
+            <div class="row"><span class="label">Stakeholder Updates:</span> ${updateCount}</div>
+            <div class="row"><span class="label">Post-Incident Artifact Ready:</span> ${artifactReady}</div>
+            <div class="row"><span class="label">Latest Timeline Entry:</span> ${latestTimeline}</div>
+          </div>
+        `;
+      }
+
+      document.getElementById("createTenant").onclick = createTenant;
+      document.getElementById("triggerSev1").onclick = triggerSev1;
+      document.getElementById("refreshPanel").onclick = refresh;
+
+      searchInput.oninput = renderQueue;
+      severityFilter.onchange = renderQueue;
+
+      document.querySelectorAll("[data-tab]").forEach((button) => {
+        button.onclick = () => {
+          document.querySelectorAll("[data-tab]").forEach((b) => b.classList.remove("active"));
+          button.classList.add("active");
+          activeTab.textContent = button.textContent;
+        };
+      });
+
+      renderTenant();
+      refresh();
+    </script>
+  </body>
+</html>

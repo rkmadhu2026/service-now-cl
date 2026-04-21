@@ -1,0 +1,105 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Tenant {
+  id         String     @id @default(uuid())
+  name       String
+  createdAt  DateTime   @default(now())
+  incidents  Incident[]
+  rooms      Room[]
+  decisions  Decision[]
+  updates    StakeholderUpdate[]
+  timeline   TimelineEvent[]
+  artifacts  Artifact[]
+}
+
+model Incident {
+  id            String      @id @default(uuid())
+  tenantId      String
+  externalId    String
+  title         String
+  service       String
+  severity      String
+  phase         String
+  elapsedMinutes Int        @default(0)
+  roomId        String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  tenant        Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  room          Room?       @relation(fields: [roomId], references: [id])
+  timeline      TimelineEvent[]
+  decisions     Decision[]
+  updates       StakeholderUpdate[]
+  artifacts     Artifact[]
+
+  @@unique([tenantId, externalId])
+  @@index([tenantId, severity, phase])
+}
+
+model Room {
+  id                String   @id @default(uuid())
+  tenantId          String
+  incidentId        String   @unique
+  roles             Json
+  unresolvedBlockers Json
+  latestHypothesis  String
+  mitigationPlan    String
+  createdAt         DateTime @default(now())
+  tenant            Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  incident          Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+}
+
+model TimelineEvent {
+  id         String   @id @default(uuid())
+  tenantId   String
+  incidentId String
+  type       String
+  message    String
+  source     String
+  createdAt  DateTime @default(now())
+  tenant     Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  incident   Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+  @@index([tenantId, incidentId, createdAt])
+}
+
+model Decision {
+  id         String   @id @default(uuid())
+  tenantId   String
+  incidentId String
+  decision   String
+  rationale  String
+  approvedBy String
+  createdAt  DateTime @default(now())
+  tenant     Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  incident   Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+  @@index([tenantId, incidentId, createdAt])
+}
+
+model StakeholderUpdate {
+  id         String   @id @default(uuid())
+  tenantId   String
+  incidentId String
+  audience   String
+  content    String
+  createdAt  DateTime @default(now())
+  tenant     Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  incident   Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+  @@index([tenantId, incidentId, audience, createdAt])
+}
+
+model Artifact {
+  id                 String   @id @default(uuid())
+  tenantId           String
+  incidentId         String
+  unresolvedFollowUps Json
+  generatedAt        DateTime @default(now())
+  tenant             Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  incident           Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+  @@index([tenantId, incidentId, generatedAt])
+}

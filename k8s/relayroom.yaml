@@ -1,0 +1,107 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: relayroom
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: relayroom-config
+  namespace: relayroom
+data:
+  PORT: "4000"
+  USE_PRISMA: "false"
+  REDIS_URL: "redis://redis:6379"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: relayroom-secrets
+  namespace: relayroom
+type: Opaque
+stringData:
+  JWT_SECRET: "change-me-jwt-secret"
+  SERVICENOW_WEBHOOK_SECRET: "change-me-servicenow-secret"
+  SLACK_WEBHOOK_SECRET: "change-me-slack-secret"
+  DATABASE_URL: "postgresql://relayroom:relayroom@postgres:5432/relayroom?schema=public"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: relayroom-api
+  namespace: relayroom
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: relayroom-api
+  template:
+    metadata:
+      labels:
+        app: relayroom-api
+    spec:
+      containers:
+        - name: relayroom-api
+          image: relayroom:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 4000
+          envFrom:
+            - configMapRef:
+                name: relayroom-config
+            - secretRef:
+                name: relayroom-secrets
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 4000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 4000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: relayroom-api
+  namespace: relayroom
+spec:
+  selector:
+    app: relayroom-api
+  ports:
+    - name: http
+      port: 80
+      targetPort: 4000
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: relayroom-ingress
+  namespace: relayroom
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "5m"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: relayroom.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: relayroom-api
+                port:
+                  number: 80
