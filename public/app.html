@@ -6,85 +6,295 @@
     <title>Relayroom App</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <style>
       :root {
-        --bg: #eef3f8;
+        --bg: #f2f6ff;
         --surface: #ffffff;
-        --surface-soft: #f8fbff;
-        --border: #d6e2ef;
-        --text: #10233a;
-        --muted: #62778f;
-        --brand: #0a66c2;
-        --brand-soft: #e8f2fd;
+        --surface-soft: #f6f9ff;
+        --border: #d4dded;
+        --text: #12213a;
+        --muted: #5e7492;
+        --brand: #2563eb;
+        --brand-strong: #1d4ed8;
+        --brand-soft: #e8efff;
         --ok: #0f7a42;
-        --warn: #c97b00;
+        --warn: #b87100;
         --danger: #a53030;
       }
-      * { box-sizing: border-box; }
+      * {
+        box-sizing: border-box;
+      }
       body {
         margin: 0;
-        font-family: "Manrope", sans-serif;
+        font-family: "Outfit", sans-serif;
         background:
-          radial-gradient(circle at 10% -20%, #d9ecff 0%, transparent 40%),
-          radial-gradient(circle at 90% -10%, #f6e8ff 0%, transparent 35%),
+          radial-gradient(circle at 10% -20%, #dcebff 0%, transparent 40%),
+          radial-gradient(circle at 90% -10%, #e9e8ff 0%, transparent 34%),
           var(--bg);
         color: var(--text);
       }
-      .shell { max-width: 1280px; margin: 0 auto; padding: 22px; }
+      .shell {
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: 24px;
+      }
       .topbar {
-        background: linear-gradient(135deg, #0e2f52, #1f5d98 65%, #2f7ed1);
+        background: linear-gradient(135deg, #132845, #1d4d8e 55%, #2563eb);
         color: #fff;
+        border-radius: 18px;
+        padding: 20px;
+        box-shadow: 0 16px 36px rgba(13, 29, 56, 0.2);
+      }
+      .topbarHead {
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        align-items: flex-start;
+      }
+      .topbar h1 {
+        margin: 0;
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 27px;
+        letter-spacing: -0.02em;
+      }
+      .topbar p {
+        margin: 8px 0 0;
+        color: #d4e8ff;
+      }
+      .statusChip {
+        border: 1px solid rgba(189, 221, 255, 0.4);
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .grid {
+        margin-top: 15px;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+      }
+      .kpi {
+        background: rgba(255, 255, 255, 0.13);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 12px;
+        padding: 11px;
+      }
+      .kpi .label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #c8e3ff;
+      }
+      .kpi .value {
+        margin-top: 7px;
+        font-size: 15px;
+        font-weight: 700;
+      }
+      .layout {
+        margin-top: 15px;
+        display: grid;
+        grid-template-columns: 250px 1fr;
+        gap: 12px;
+      }
+      .panel {
+        background: var(--surface);
+        border: 1px solid var(--border);
         border-radius: 16px;
-        padding: 18px 20px;
-        box-shadow: 0 10px 35px rgba(16, 35, 58, 0.2);
+        padding: 14px;
       }
-      .topbar h1 { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: 0.01em; }
-      .topbar p { margin: 8px 0 0; color: #daebff; }
-      .grid { margin-top: 14px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
-      .kpi { background: rgba(255, 255, 255, 0.13); border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 12px; padding: 10px; }
-      .kpi .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #c8e3ff; }
-      .kpi .value { margin-top: 6px; font-size: 14px; font-weight: 700; }
-      .layout { margin-top: 14px; display: grid; grid-template-columns: 210px 1fr; gap: 12px; }
-      .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px; }
-      .navTitle { margin: 0 0 8px; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+      .navTitle {
+        margin: 0 0 8px;
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 700;
+      }
       .nav button {
-        width: 100%; text-align: left; background: transparent; border: 1px solid var(--border);
-        color: var(--text); border-radius: 10px; margin-bottom: 8px; padding: 10px; font-weight: 600; cursor: pointer;
+        width: 100%;
+        text-align: left;
+        background: #fff;
+        border: 1px solid var(--border);
+        color: var(--text);
+        border-radius: 11px;
+        margin-bottom: 8px;
+        padding: 10px;
+        font-weight: 600;
+        cursor: pointer;
       }
-      .nav button.active { background: var(--brand-soft); border-color: #9cc9f6; color: #0b4f95; }
-      .content { display: grid; grid-template-columns: 360px 1fr; gap: 12px; }
-      .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
-      input, select { flex: 1; min-width: 120px; border: 1px solid #c9d8e7; border-radius: 10px; padding: 9px 10px; font-family: "Manrope", sans-serif; }
-      .btn { border: 1px solid #abcff4; background: var(--brand-soft); color: #0d4d90; border-radius: 10px; padding: 9px 12px; font-weight: 700; cursor: pointer; }
-      .btn.primary { background: var(--brand); border-color: var(--brand); color: #fff; }
-      .queue { max-height: 620px; overflow: auto; }
-      .incidentItem { border: 1px solid var(--border); border-radius: 12px; background: var(--surface-soft); padding: 10px; margin-bottom: 8px; cursor: pointer; }
-      .incidentItem.active { background: #eef6ff; border-color: #86bbee; box-shadow: 0 0 0 2px #d8eafd inset; }
-      .incidentTitle { font-weight: 700; font-size: 14px; }
-      .meta { margin-top: 6px; color: var(--muted); font-size: 12px; }
-      .badge { display: inline-block; border-radius: 999px; padding: 3px 9px; font-size: 11px; font-weight: 800; margin-right: 6px; }
+      .nav button.active {
+        background: var(--brand-soft);
+        border-color: #9ab9ff;
+        color: var(--brand-strong);
+      }
+      .workspaceMeta {
+        background: var(--surface-soft);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 9px;
+        margin-bottom: 10px;
+      }
+      .workspaceMeta .row {
+        margin-top: 4px;
+      }
+      .content {
+        display: grid;
+        grid-template-columns: minmax(300px, 380px) minmax(0, 1fr);
+        gap: 12px;
+      }
+      .toolbar {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+      }
+      input,
+      select {
+        flex: 1;
+        min-width: 120px;
+        border: 1px solid #c9d8e7;
+        border-radius: 10px;
+        padding: 9px 10px;
+        font-family: "Outfit", sans-serif;
+      }
+      input:focus,
+      select:focus {
+        outline: 2px solid #c2d8ff;
+        border-color: #9ebfff;
+      }
+      .btn {
+        border: 1px solid #abcff4;
+        background: var(--brand-soft);
+        color: #0d4d90;
+        border-radius: 10px;
+        padding: 9px 12px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .btn.primary {
+        background: var(--brand);
+        border-color: var(--brand);
+        color: #fff;
+      }
+      .queue {
+        max-height: 640px;
+        overflow: auto;
+        padding-right: 4px;
+      }
+      .incidentItem {
+        border: 1px solid var(--border);
+        border-radius: 13px;
+        background: var(--surface-soft);
+        padding: 11px;
+        margin-bottom: 8px;
+        cursor: pointer;
+      }
+      .incidentItem.active {
+        background: #edf3ff;
+        border-color: #89affc;
+        box-shadow: 0 0 0 2px #d5e4ff inset;
+      }
+      .incidentTitle {
+        font-weight: 700;
+        font-size: 14px;
+      }
+      .meta {
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .badge {
+        display: inline-block;
+        border-radius: 999px;
+        padding: 3px 9px;
+        font-size: 11px;
+        font-weight: 800;
+        margin-right: 6px;
+      }
       .sev1 { background: #fde8e8; color: var(--danger); }
       .sev2 { background: #fff2db; color: var(--warn); }
       .sev3 { background: #e7f7ee; color: var(--ok); }
-      .phase { background: #e8f1ff; color: #245ea2; }
-      .detail { max-height: 620px; overflow: auto; }
-      .card { border: 1px solid var(--border); border-radius: 12px; background: #fff; padding: 12px; margin-bottom: 10px; }
-      .card h3 { margin: 0 0 8px; font-size: 14px; letter-spacing: 0.02em; }
-      .row { margin-top: 6px; font-size: 13px; }
-      .label { color: var(--muted); font-weight: 600; }
-      code { font-family: "IBM Plex Mono", monospace; color: #0f4d90; background: #f0f6ff; border-radius: 6px; padding: 1px 6px; }
+      .phase {
+        background: #e8f1ff;
+        color: #245ea2;
+      }
+      .detail {
+        max-height: 640px;
+        overflow: auto;
+        padding-right: 4px;
+      }
+      .card {
+        border: 1px solid var(--border);
+        border-radius: 13px;
+        background: #fff;
+        padding: 13px;
+        margin-bottom: 10px;
+      }
+      .card h3 {
+        margin: 0 0 9px;
+        font-size: 13px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #2f4c76;
+      }
+      .row {
+        margin-top: 6px;
+        font-size: 13px;
+      }
+      .label {
+        color: var(--muted);
+        font-weight: 600;
+      }
+      code {
+        font-family: "IBM Plex Mono", monospace;
+        color: #0f4d90;
+        background: #f0f6ff;
+        border-radius: 6px;
+        padding: 1px 6px;
+      }
       .state-ok { color: var(--ok); }
       .state-warn { color: var(--warn); }
       .muted { color: var(--muted); }
       .link { color: #e9f4ff; text-decoration: underline; }
+      hr {
+        border: 0;
+        border-top: 1px solid var(--border);
+        margin: 10px 0;
+      }
+      @media (max-width: 1120px) {
+        .grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .layout {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 860px) {
+        .shell {
+          padding: 16px;
+        }
+        .topbarHead {
+          flex-direction: column;
+        }
+        .content {
+          grid-template-columns: 1fr;
+        }
+      }
     </style>
   </head>
   <body>
     <div class="shell">
       <section class="topbar">
+        <div class="topbarHead">
+          <div>
         <h1>Relayroom Incident Command Console</h1>
-        <p>Execution layer for ServiceNow incidents. <a class="link" href="/">Back to landing</a></p>
+            <p>Execution layer for ServiceNow incidents. <a class="link" href="/">Back to landing</a></p>
+          </div>
+          <div class="statusChip">Demo mode • Local environment</div>
+        </div>
         <div class="grid">
           <div class="kpi"><div class="label">Organization</div><div class="value">Relayroom Demo Operations</div></div>
           <div class="kpi"><div class="label">Business Unit</div><div class="value">Digital Payments Platform</div></div>
@@ -100,7 +310,9 @@
           <button data-tab="incidents">Incidents</button>
           <button data-tab="timeline">Timeline</button>
           <button data-tab="recommendations">Recommendations</button>
-          <div class="row muted">Active tab: <strong id="activeTab">Overview</strong></div>
+          <div class="workspaceMeta">
+            <div class="row muted">Active tab: <strong id="activeTab">Overview</strong></div>
+          </div>
           <hr />
           <div class="navTitle">Session</div>
           <button id="logout" class="btn">Log out</button>
@@ -155,23 +367,6 @@
       const orgName = "Relayroom Demo Operations";
       const clientName = "Digital Payments Platform";
       const serviceNowSecret = "servicenow-dev-secret";
-      // #region agent log
-      function debugLog(hypothesisId, location, message, data) {
-        fetch("http://127.0.0.1:7604/ingest/492871f3-3967-48e7-a66a-f15499571c9d", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "22a606" },
-          body: JSON.stringify({
-            sessionId: "22a606",
-            runId: "ui-repro",
-            hypothesisId,
-            location,
-            message,
-            data,
-            timestamp: Date.now()
-          })
-        }).catch(() => {});
-      }
-      // #endregion
       const headers = () => ({ "content-type": "application/json", authorization: `Bearer ${token}` });
 
       function describeService(service) {
@@ -206,13 +401,6 @@
       function renderSession() {
         tenantState.textContent = tenantId ? `Tenant: ${tenantId}` : "Tenant: -";
         authState.textContent = token ? "Token: present" : "Token: -";
-        // #region agent log
-        debugLog("H1", "public/app.html:191", "App session loaded", {
-          hasTenantId: Boolean(tenantId),
-          hasToken: Boolean(token),
-          tokenLength: token.length
-        });
-        // #endregion
         if (!token) {
           setAction("Not logged in. Go to /auth to sign in.", "warn");
         }
@@ -275,12 +463,6 @@
 
       async function refresh() {
         if (!tenantId || !token) {
-          // #region agent log
-          debugLog("H2", "public/app.html:255", "Refresh skipped due to missing state", {
-            hasTenantId: Boolean(tenantId),
-            hasToken: Boolean(token)
-          });
-          // #endregion
           return;
         }
         const res = await fetch("/api/incidents", { headers: headers() });

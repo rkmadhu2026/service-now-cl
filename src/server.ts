@@ -33,12 +33,12 @@ export function buildServer() {
       }
     })
   );
-  app.use(express.static(path.join(__dirname, "..", "public")));
 
   // Frontend routes
   app.get("/", (_req, res) => res.sendFile(path.join(__dirname, "..", "public", "landing.html")));
   app.get("/auth", (_req, res) => res.sendFile(path.join(__dirname, "..", "public", "auth.html")));
   app.get("/app", (_req, res) => res.sendFile(path.join(__dirname, "..", "public", "app.html")));
+  app.use(express.static(path.join(__dirname, "..", "public")));
 
   app.get("/health", (_req, res) => res.json({ status: "ok" }));
 

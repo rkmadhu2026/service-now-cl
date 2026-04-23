@@ -3,61 +3,236 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Relayroom — Sign in</title>
+    <title>Relayroom - Sign in</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <style>
       :root {
-        --bg: #eef3f8;
-        --surface: #ffffff;
-        --border: #d6e2ef;
-        --text: #10233a;
-        --muted: #62778f;
-        --brand: #0a66c2;
-        --brand-soft: #e8f2fd;
+        --bg: #060b17;
+        --surface: #101b31;
+        --surface-soft: #162541;
+        --border: #2a3d63;
+        --text: #e8f1ff;
+        --muted: #a1b4d4;
+        --brand: #2f7fff;
+        --brand-soft: #274f8e;
         --ok: #0f7a42;
-        --warn: #c97b00;
+        --warn: #f0b44d;
       }
-      * { box-sizing: border-box; }
+      * {
+        box-sizing: border-box;
+      }
       body {
         margin: 0;
-        font-family: "Manrope", sans-serif;
+        font-family: "Outfit", sans-serif;
         background:
-          radial-gradient(circle at 10% -20%, #d9ecff 0%, transparent 40%),
-          radial-gradient(circle at 90% -10%, #f6e8ff 0%, transparent 35%),
+          radial-gradient(900px 500px at 5% -20%, rgba(47, 127, 255, 0.25), transparent 70%),
+          radial-gradient(900px 500px at 100% -20%, rgba(59, 210, 178, 0.22), transparent 70%),
           var(--bg);
         color: var(--text);
+        min-height: 100vh;
       }
-      .wrap { max-width: 980px; margin: 0 auto; padding: 26px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; }
-      .hero { padding: 18px; border-radius: 16px; background: linear-gradient(135deg, #0e2f52, #1f5d98 65%, #2f7ed1); color: #fff; border: 1px solid rgba(255,255,255,0.18); }
-      .hero h1 { margin: 0; font-size: 26px; font-weight: 800; }
-      .hero p { margin: 10px 0 0; color: #daebff; }
-      .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px; }
-      .tabs { display: flex; gap: 8px; margin-bottom: 12px; }
-      .tab { flex: 1; border: 1px solid var(--border); background: #fff; border-radius: 12px; padding: 10px; font-weight: 800; cursor: pointer; }
-      .tab.active { background: var(--brand-soft); border-color: #9cc9f6; color: #0b4f95; }
-      label { display: block; font-size: 12px; color: var(--muted); font-weight: 700; margin-top: 10px; }
-      input { width: 100%; border: 1px solid #c9d8e7; border-radius: 12px; padding: 10px; margin-top: 6px; font-family: "Manrope", sans-serif; }
-      .btn { margin-top: 12px; width: 100%; border-radius: 12px; border: 1px solid #abcff4; background: var(--brand); color: #fff; padding: 10px; font-weight: 900; cursor: pointer; }
-      .muted { color: var(--muted); font-size: 13px; }
-      code { font-family: "IBM Plex Mono", monospace; background: #f0f6ff; border-radius: 8px; padding: 2px 6px; color: #0f4d90; }
-      .state { margin-top: 10px; font-size: 13px; }
+      .wrap {
+        width: min(1120px, calc(100% - 30px));
+        margin: 0 auto;
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 1fr minmax(360px, 430px);
+        gap: 22px;
+        align-items: center;
+      }
+      .hero {
+        padding: 22px;
+      }
+      .hero h1 {
+        margin: 0;
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 46px;
+        line-height: 0.95;
+        letter-spacing: -0.03em;
+      }
+      .hero p {
+        margin: 12px 0 0;
+        color: var(--muted);
+        line-height: 1.55;
+        max-width: 56ch;
+      }
+      .heroTags {
+        margin-top: 16px;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .tag {
+        border: 1px solid #36507f;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.02);
+        padding: 7px 10px;
+        font-size: 12px;
+        color: #bdd0ef;
+      }
+      .card {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 18px;
+        box-shadow: 0 20px 45px rgba(5, 10, 20, 0.35);
+      }
+      .cardTitle {
+        margin: 0;
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 25px;
+      }
+      .tabs {
+        display: flex;
+        gap: 8px;
+        margin: 14px 0 8px;
+      }
+      .tab {
+        flex: 1;
+        border: 1px solid #3a5483;
+        color: #cfe0ff;
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 10px;
+        padding: 10px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .tab.active {
+        background: #264d8d;
+        border-color: #4d77ba;
+        color: #fff;
+      }
+      label {
+        display: block;
+        font-size: 12px;
+        color: #aec2e4;
+        font-weight: 700;
+        margin-top: 10px;
+      }
+      input {
+        width: 100%;
+        border: 1px solid #33517d;
+        border-radius: 10px;
+        padding: 10px;
+        margin-top: 6px;
+        color: #eff5ff;
+        background: #0d1a31;
+        font-family: "Outfit", sans-serif;
+      }
+      input::placeholder {
+        color: #7f95b8;
+      }
+      .metaRow {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+      }
+      .checkbox {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        color: #a8bddf;
+        font-size: 13px;
+      }
+      .checkbox input {
+        width: auto;
+        margin: 0;
+      }
+      .link {
+        color: #b8d2ff;
+        text-decoration: none;
+        font-size: 13px;
+      }
+      .btn {
+        margin-top: 12px;
+        width: 100%;
+        border-radius: 10px;
+        border: 1px solid #4584ea;
+        background: linear-gradient(135deg, #307fff, #5a9cff);
+        color: #fff;
+        padding: 10px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+      .altDivider {
+        margin: 14px 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #7f95b8;
+        font-size: 12px;
+      }
+      .altDivider::before,
+      .altDivider::after {
+        content: "";
+        height: 1px;
+        background: #324f7e;
+        flex: 1;
+      }
+      .btnSecondary {
+        width: 100%;
+        border-radius: 10px;
+        border: 1px solid #385987;
+        background: #172846;
+        color: #dbe8ff;
+        padding: 10px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .muted {
+        color: var(--muted);
+        font-size: 13px;
+      }
+      code {
+        font-family: "IBM Plex Mono", monospace;
+        background: #1a2d4c;
+        border-radius: 7px;
+        padding: 2px 6px;
+        color: #cce2ff;
+      }
+      .state {
+        margin-top: 10px;
+        font-size: 13px;
+      }
       .ok { color: var(--ok); }
       .warn { color: var(--warn); }
-      a { color: #0b4f95; }
-      @media (max-width: 860px) { .wrap { grid-template-columns: 1fr; } }
+      .foot {
+        margin-top: 14px;
+        text-align: center;
+        color: #7f95b8;
+        font-size: 12px;
+      }
+      @media (max-width: 940px) {
+        .wrap {
+          grid-template-columns: 1fr;
+          padding: 22px 0;
+        }
+        .hero h1 {
+          font-size: 40px;
+        }
+      }
     </style>
   </head>
   <body>
     <div class="wrap">
       <section class="hero">
-        <h1>Relayroom</h1>
-        <p>Sign in to the incident command console. If you’re new, create your workspace in 30 seconds.</p>
-        <p class="muted">Back to <a style="color:#fff; text-decoration: underline" href="/">landing</a>.</p>
+        <h1>Incident Monitoring<br />and Response</h1>
+        <p>Access your Relayroom workspace to track incidents, analyze signal quality, and coordinate response operations.</p>
+        <div class="heroTags">
+          <span class="tag">Monitoring</span>
+          <span class="tag">BOD/EOD Tracking</span>
+          <span class="tag">Data Analytics</span>
+          <span class="tag">Automation</span>
+        </div>
+        <p class="muted" style="margin-top: 16px">Back to <a class="link" href="/">landing</a>.</p>
       </section>
 
       <section class="card">
+        <h2 class="cardTitle">Sign in with Relayroom</h2>
         <div class="tabs">
           <button class="tab active" id="tabSignup">Sign up</button>
           <button class="tab" id="tabSignin">Sign in</button>
@@ -70,9 +245,16 @@
           <label for="signupEmail">Your email</label>
           <input id="signupEmail" placeholder="you@company.com" />
 
+          <div class="metaRow">
+            <label class="checkbox"><input type="checkbox" checked /> Remember me</label>
+            <a class="link" href="#">Forgot Password?</a>
+          </div>
+
           <button class="btn" id="signupBtn">Create workspace</button>
           <div class="state muted" id="signupState"></div>
-          <p class="muted">This demo uses tenant+token (no password yet). You can replace with real SSO later.</p>
+          <div class="altDivider">OR</div>
+          <button class="btnSecondary" type="button">Continue with Microsoft</button>
+          <p class="muted">This demo uses tenant + token (no password yet). Replace with real SSO when ready.</p>
         </div>
 
         <div id="signinForm" style="display:none">
@@ -82,9 +264,17 @@
           <label for="signinEmail">Your email</label>
           <input id="signinEmail" placeholder="you@company.com" />
 
+          <div class="metaRow">
+            <label class="checkbox"><input type="checkbox" checked /> Remember me</label>
+            <a class="link" href="#">Forgot Password?</a>
+          </div>
+
           <button class="btn" id="signinBtn">Sign in</button>
           <div class="state muted" id="signinState"></div>
+          <div class="altDivider">OR</div>
+          <button class="btnSecondary" type="button">Continue with Microsoft</button>
         </div>
+        <div class="foot">Copyright © Relayroom 2026</div>
       </section>
     </div>
 
