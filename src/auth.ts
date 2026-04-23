@@ -25,9 +25,9 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
       body: JSON.stringify({
         sessionId: "22a606",
         runId: "ui-repro",
-        hypothesisId: "H5",
-        location: "src/auth.ts:22",
-        message: "Auth header missing or malformed",
+        hypothesisId: "H3",
+        location: "src/auth.ts:21",
+        message: "Authorization header missing or malformed",
         data: { path: req.path, hasAuthorizationHeader: Boolean(req.header("authorization")) },
         timestamp: Date.now()
       })
@@ -47,9 +47,9 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
       body: JSON.stringify({
         sessionId: "22a606",
         runId: "ui-repro",
-        hypothesisId: "H5",
-        location: "src/auth.ts:39",
-        message: "Token accepted by auth middleware",
+        hypothesisId: "H4",
+        location: "src/auth.ts:41",
+        message: "Authorization token verified",
         data: { path: req.path, tenantId: payload.tenantId, role: payload.role },
         timestamp: Date.now()
       })
@@ -65,9 +65,9 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
         sessionId: "22a606",
         runId: "ui-repro",
         hypothesisId: "H5",
-        location: "src/auth.ts:54",
-        message: "Token rejected by auth middleware",
-        data: { path: req.path, hasAuthorizationHeader: Boolean(req.header("authorization")) },
+        location: "src/auth.ts:57",
+        message: "Authorization token verification failed",
+        data: { path: req.path },
         timestamp: Date.now()
       })
     }).catch(() => {});

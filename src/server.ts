@@ -36,60 +36,9 @@ export function buildServer() {
   app.use(express.static(path.join(__dirname, "..", "public")));
 
   // Frontend routes
-  app.get("/", (_req, res) => {
-    // #region agent log
-    fetch("http://127.0.0.1:7604/ingest/492871f3-3967-48e7-a66a-f15499571c9d", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "22a606" },
-      body: JSON.stringify({
-        sessionId: "22a606",
-        runId: "ui-repro",
-        hypothesisId: "H2",
-        location: "src/server.ts:40",
-        message: "Landing route served",
-        data: { route: "/" },
-        timestamp: Date.now()
-      })
-    }).catch(() => {});
-    // #endregion
-    return res.sendFile(path.join(__dirname, "..", "public", "landing.html"));
-  });
-  app.get("/auth", (_req, res) => {
-    // #region agent log
-    fetch("http://127.0.0.1:7604/ingest/492871f3-3967-48e7-a66a-f15499571c9d", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "22a606" },
-      body: JSON.stringify({
-        sessionId: "22a606",
-        runId: "ui-repro",
-        hypothesisId: "H2",
-        location: "src/server.ts:56",
-        message: "Auth route served",
-        data: { route: "/auth" },
-        timestamp: Date.now()
-      })
-    }).catch(() => {});
-    // #endregion
-    return res.sendFile(path.join(__dirname, "..", "public", "auth.html"));
-  });
-  app.get("/app", (_req, res) => {
-    // #region agent log
-    fetch("http://127.0.0.1:7604/ingest/492871f3-3967-48e7-a66a-f15499571c9d", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "22a606" },
-      body: JSON.stringify({
-        sessionId: "22a606",
-        runId: "ui-repro",
-        hypothesisId: "H2",
-        location: "src/server.ts:72",
-        message: "App route served",
-        data: { route: "/app" },
-        timestamp: Date.now()
-      })
-    }).catch(() => {});
-    // #endregion
-    return res.sendFile(path.join(__dirname, "..", "public", "app.html"));
-  });
+  app.get("/", (_req, res) => res.sendFile(path.join(__dirname, "..", "public", "landing.html")));
+  app.get("/auth", (_req, res) => res.sendFile(path.join(__dirname, "..", "public", "auth.html")));
+  app.get("/app", (_req, res) => res.sendFile(path.join(__dirname, "..", "public", "app.html")));
 
   app.get("/health", (_req, res) => res.json({ status: "ok" }));
 
@@ -100,24 +49,7 @@ export function buildServer() {
       role: z.enum(["admin", "commander", "responder", "observer"])
     });
     const parsed = bodySchema.safeParse(req.body);
-    if (!parsed.success) {
-      // #region agent log
-      fetch("http://127.0.0.1:7604/ingest/492871f3-3967-48e7-a66a-f15499571c9d", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "22a606" },
-        body: JSON.stringify({
-          sessionId: "22a606",
-          runId: "ui-repro",
-          hypothesisId: "H3",
-          location: "src/server.ts:89",
-          message: "Token request validation failed",
-          data: { hasTenantId: Boolean(req.body?.tenantId), role: req.body?.role },
-          timestamp: Date.now()
-        })
-      }).catch(() => {});
-      // #endregion
-      return res.status(400).json({ error: parsed.error.flatten() });
-    }
+    if (!parsed.success) return res.status(400).json({ error: parsed.error.flatten() });
     const token = signAccessToken({
       sub: parsed.data.subject,
       tenantId: parsed.data.tenantId,
@@ -136,24 +68,7 @@ export function buildServer() {
   app.use("/api/incidents", requireAuth);
 
   app.get("/api/incidents", async (req, res) => {
-    if (!req.auth) {
-      // #region agent log
-      fetch("http://127.0.0.1:7604/ingest/492871f3-3967-48e7-a66a-f15499571c9d", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "22a606" },
-        body: JSON.stringify({
-          sessionId: "22a606",
-          runId: "ui-repro",
-          hypothesisId: "H4",
-          location: "src/server.ts:122",
-          message: "Incidents list unauthorized",
-          data: { hasAuthorizationHeader: Boolean(req.header("authorization")) },
-          timestamp: Date.now()
-        })
-      }).catch(() => {});
-      // #endregion
-      return res.status(401).json({ error: "Unauthorized" });
-    }
+    if (!req.auth) return res.status(401).json({ error: "Unauthorized" });
     return res.json({ items: await service.listIncidents(req.auth.tenantId) });
   });
 
