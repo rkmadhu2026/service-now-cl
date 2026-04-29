@@ -11,12 +11,26 @@ model Tenant {
   id         String     @id @default(uuid())
   name       String
   createdAt  DateTime   @default(now())
+  users      User[]
   incidents  Incident[]
   rooms      Room[]
   decisions  Decision[]
   updates    StakeholderUpdate[]
   timeline   TimelineEvent[]
   artifacts  Artifact[]
+}
+
+model User {
+  id           String   @id @default(uuid())
+  tenantId     String
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         String
+  createdAt    DateTime @default(now())
+  tenant       Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, role])
 }
 
 model Incident {
@@ -32,7 +46,7 @@ model Incident {
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
   tenant        Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  room          Room?       @relation(fields: [roomId], references: [id])
+  roomRecord    Room?       @relation("IncidentRoom")
   timeline      TimelineEvent[]
   decisions     Decision[]
   updates       StakeholderUpdate[]
@@ -52,7 +66,7 @@ model Room {
   mitigationPlan    String
   createdAt         DateTime @default(now())
   tenant            Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  incident          Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+  incident          Incident @relation("IncidentRoom", fields: [incidentId], references: [id], onDelete: Cascade)
 }
 
 model TimelineEvent {

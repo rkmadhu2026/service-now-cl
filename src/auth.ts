@@ -18,21 +18,6 @@ export function signAccessToken(claims: AuthClaims) {
 export function requireAuth(req: Request, res: Response, next: NextFunction) {
   const parsed = authHeaderSchema.safeParse(req.header("authorization"));
   if (!parsed.success) {
-    // #region agent log
-    fetch("http://127.0.0.1:7604/ingest/492871f3-3967-48e7-a66a-f15499571c9d", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "22a606" },
-      body: JSON.stringify({
-        sessionId: "22a606",
-        runId: "ui-repro",
-        hypothesisId: "H3",
-        location: "src/auth.ts:21",
-        message: "Authorization header missing or malformed",
-        data: { path: req.path, hasAuthorizationHeader: Boolean(req.header("authorization")) },
-        timestamp: Date.now()
-      })
-    }).catch(() => {});
-    // #endregion
     return res.status(401).json({ error: "Missing bearer token" });
   }
   const token = parsed.data.replace(/^Bearer\s+/, "");
@@ -40,38 +25,8 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
   try {
     const payload = jwt.verify(token, config.jwtSecret) as AuthClaims;
     req.auth = payload;
-    // #region agent log
-    fetch("http://127.0.0.1:7604/ingest/492871f3-3967-48e7-a66a-f15499571c9d", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "22a606" },
-      body: JSON.stringify({
-        sessionId: "22a606",
-        runId: "ui-repro",
-        hypothesisId: "H4",
-        location: "src/auth.ts:41",
-        message: "Authorization token verified",
-        data: { path: req.path, tenantId: payload.tenantId, role: payload.role },
-        timestamp: Date.now()
-      })
-    }).catch(() => {});
-    // #endregion
     return next();
   } catch {
-    // #region agent log
-    fetch("http://127.0.0.1:7604/ingest/492871f3-3967-48e7-a66a-f15499571c9d", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "22a606" },
-      body: JSON.stringify({
-        sessionId: "22a606",
-        runId: "ui-repro",
-        hypothesisId: "H5",
-        location: "src/auth.ts:57",
-        message: "Authorization token verification failed",
-        data: { path: req.path },
-        timestamp: Date.now()
-      })
-    }).catch(() => {});
-    // #endregion
     return res.status(401).json({ error: "Invalid token" });
   }
 }

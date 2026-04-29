@@ -3,139 +3,136 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Relayroom - Sign in</title>
+    <title>LinkedEye Style Sign in | Relayroom</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <style>
       :root {
-        --bg: #060b17;
-        --surface: #101b31;
-        --surface-soft: #162541;
-        --border: #2a3d63;
-        --text: #e8f1ff;
-        --muted: #a1b4d4;
-        --brand: #2f7fff;
-        --brand-soft: #274f8e;
+        --bg: #0b1220;
+        --surface: #ffffff;
+        --surface-soft: #f6f8fc;
+        --border: #d8e0ef;
+        --text: #101f3a;
+        --muted: #5f6f8f;
+        --brand: #0f62fe;
+        --brand-hover: #0b53d8;
+        --brand-soft: #e8f0ff;
+        --secondary-bg: #f8fafc;
+        --secondary-border: #cbd7ea;
         --ok: #0f7a42;
-        --warn: #f0b44d;
+        --warn: #c97b00;
       }
-      * {
-        box-sizing: border-box;
-      }
+      * { box-sizing: border-box; }
       body {
         margin: 0;
         font-family: "Outfit", sans-serif;
-        background:
-          radial-gradient(900px 500px at 5% -20%, rgba(47, 127, 255, 0.25), transparent 70%),
-          radial-gradient(900px 500px at 100% -20%, rgba(59, 210, 178, 0.22), transparent 70%),
-          var(--bg);
-        color: var(--text);
         min-height: 100vh;
+        background:
+          radial-gradient(760px 420px at 12% 0%, rgba(15, 98, 254, 0.24), transparent 72%),
+          radial-gradient(620px 320px at 90% 0%, rgba(40, 199, 111, 0.12), transparent 72%),
+          var(--bg);
+        color: #eef4ff;
       }
-      .wrap {
-        width: min(1120px, calc(100% - 30px));
-        margin: 0 auto;
+      .shell {
         min-height: 100vh;
         display: grid;
-        grid-template-columns: 1fr minmax(360px, 430px);
-        gap: 22px;
-        align-items: center;
+        place-items: center;
+        padding: 24px 14px;
       }
-      .hero {
-        padding: 22px;
+      .topTags {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 18px;
+        color: #d1def7;
+        font-size: 15px;
+        font-style: italic;
       }
-      .hero h1 {
+      .stack {
+        width: min(420px, 100%);
+      }
+      .brand {
+        text-align: center;
+        margin-bottom: 12px;
+      }
+      .brand h1 {
         margin: 0;
         font-family: "Space Grotesk", sans-serif;
-        font-size: 46px;
-        line-height: 0.95;
-        letter-spacing: -0.03em;
+        letter-spacing: 0.02em;
+        font-size: 32px;
       }
-      .hero p {
-        margin: 12px 0 0;
-        color: var(--muted);
-        line-height: 1.55;
-        max-width: 56ch;
-      }
-      .heroTags {
-        margin-top: 16px;
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-      }
-      .tag {
-        border: 1px solid #36507f;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.02);
-        padding: 7px 10px;
-        font-size: 12px;
-        color: #bdd0ef;
+      .brand p {
+        margin: 6px 0 0;
+        color: #b9cbed;
+        font-size: 14px;
       }
       .card {
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+        background: var(--surface);
+        color: var(--text);
         border: 1px solid var(--border);
-        border-radius: 18px;
+        border-radius: 14px;
         padding: 18px;
-        box-shadow: 0 20px 45px rgba(5, 10, 20, 0.35);
+        box-shadow: 0 20px 40px rgba(4, 10, 22, 0.28);
       }
       .cardTitle {
         margin: 0;
+        text-align: center;
+        font-size: 22px;
         font-family: "Space Grotesk", sans-serif;
-        font-size: 25px;
       }
       .tabs {
-        display: flex;
-        gap: 8px;
         margin: 14px 0 8px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
       }
       .tab {
-        flex: 1;
-        border: 1px solid #3a5483;
-        color: #cfe0ff;
-        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--border);
+        background: var(--secondary-bg);
         border-radius: 10px;
         padding: 10px;
         font-weight: 700;
+        color: #344b72;
         cursor: pointer;
       }
       .tab.active {
-        background: #264d8d;
-        border-color: #4d77ba;
-        color: #fff;
+        color: var(--brand);
+        background: var(--brand-soft);
+        border-color: #aac0f3;
       }
       label {
         display: block;
-        font-size: 12px;
-        color: #aec2e4;
-        font-weight: 700;
         margin-top: 10px;
+        font-size: 12px;
+        color: var(--muted);
+        font-weight: 700;
       }
       input {
         width: 100%;
-        border: 1px solid #33517d;
-        border-radius: 10px;
-        padding: 10px;
         margin-top: 6px;
-        color: #eff5ff;
-        background: #0d1a31;
+        padding: 10px;
+        border: 1px solid #c9d3e8;
+        border-radius: 10px;
+        background: #fff;
         font-family: "Outfit", sans-serif;
       }
-      input::placeholder {
-        color: #7f95b8;
+      input:focus {
+        outline: 2px solid #c8d7ff;
+        border-color: #97b3f5;
       }
       .metaRow {
         margin-top: 10px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 10px;
       }
       .checkbox {
         display: inline-flex;
         align-items: center;
         gap: 7px;
-        color: #a8bddf;
+        color: var(--muted);
         font-size: 13px;
       }
       .checkbox input {
@@ -143,96 +140,83 @@
         margin: 0;
       }
       .link {
-        color: #b8d2ff;
+        color: var(--brand);
         text-decoration: none;
         font-size: 13px;
       }
       .btn {
         margin-top: 12px;
         width: 100%;
+        border: 1px solid var(--brand);
         border-radius: 10px;
-        border: 1px solid #4584ea;
-        background: linear-gradient(135deg, #307fff, #5a9cff);
+        background: var(--brand);
         color: #fff;
         padding: 10px;
         font-weight: 800;
         cursor: pointer;
+      }
+      .btn:hover {
+        background: var(--brand-hover);
       }
       .altDivider {
         margin: 14px 0;
         display: flex;
         align-items: center;
         gap: 10px;
-        color: #7f95b8;
+        color: #8b9abb;
         font-size: 12px;
       }
       .altDivider::before,
       .altDivider::after {
         content: "";
         height: 1px;
-        background: #324f7e;
+        background: #d7dfed;
         flex: 1;
       }
       .btnSecondary {
         width: 100%;
+        border: 1px solid var(--secondary-border);
         border-radius: 10px;
-        border: 1px solid #385987;
-        background: #172846;
-        color: #dbe8ff;
+        background: var(--secondary-bg);
+        color: #213458;
         padding: 10px;
         font-weight: 700;
         cursor: pointer;
       }
-      .muted {
-        color: var(--muted);
-        font-size: 13px;
-      }
+      .muted { color: var(--muted); font-size: 13px; }
       code {
         font-family: "IBM Plex Mono", monospace;
-        background: #1a2d4c;
+        background: #edf2ff;
         border-radius: 7px;
         padding: 2px 6px;
-        color: #cce2ff;
+        color: #2b4f9a;
       }
-      .state {
-        margin-top: 10px;
-        font-size: 13px;
-      }
+      .state { margin-top: 10px; font-size: 13px; }
       .ok { color: var(--ok); }
       .warn { color: var(--warn); }
       .foot {
         margin-top: 14px;
         text-align: center;
-        color: #7f95b8;
+        color: #c1d2f1;
         font-size: 12px;
-      }
-      @media (max-width: 940px) {
-        .wrap {
-          grid-template-columns: 1fr;
-          padding: 22px 0;
-        }
-        .hero h1 {
-          font-size: 40px;
-        }
       }
     </style>
   </head>
   <body>
-    <div class="wrap">
-      <section class="hero">
-        <h1>Incident Monitoring<br />and Response</h1>
-        <p>Access your Relayroom workspace to track incidents, analyze signal quality, and coordinate response operations.</p>
-        <div class="heroTags">
-          <span class="tag">Monitoring</span>
-          <span class="tag">BOD/EOD Tracking</span>
-          <span class="tag">Data Analytics</span>
-          <span class="tag">Automation</span>
+    <div class="shell">
+      <div class="stack">
+        <div class="topTags">
+          <span>Monitoring</span>
+          <span>BOD EOD Status Tracking</span>
+          <span>Data Analytics</span>
+          <span>Automation</span>
         </div>
-        <p class="muted" style="margin-top: 16px">Back to <a class="link" href="/">landing</a>.</p>
-      </section>
-
-      <section class="card">
-        <h2 class="cardTitle">Sign in with Relayroom</h2>
+        <div class="brand">
+          <h1>Relayroom</h1>
+          <p>Sign in with Relayroom</p>
+        </div>
+        <section class="card">
+        <h2 class="cardTitle">Access Workspace</h2>
         <div class="tabs">
           <button class="tab active" id="tabSignup">Sign up</button>
           <button class="tab" id="tabSignin">Sign in</button>
@@ -240,42 +224,49 @@
 
         <div id="signupForm">
           <label for="orgName">Organization name</label>
-          <input id="orgName" placeholder="Acme Corp — IT Operations" />
+          <input id="orgName" type="text" autocomplete="organization" placeholder="Acme Corp — IT Operations" />
+
+          <label for="signupName">Full name</label>
+          <input id="signupName" type="text" autocomplete="name" placeholder="Jane Doe" />
 
           <label for="signupEmail">Your email</label>
-          <input id="signupEmail" placeholder="you@company.com" />
+          <input id="signupEmail" type="email" autocomplete="email" placeholder="you@company.com" />
+
+          <label for="signupPassword">Password</label>
+          <input id="signupPassword" type="password" autocomplete="new-password" placeholder="At least 8 characters" />
 
           <div class="metaRow">
             <label class="checkbox"><input type="checkbox" checked /> Remember me</label>
-            <a class="link" href="#">Forgot Password?</a>
+            <a class="link" href="#" data-forgot-password>Forgot Password?</a>
           </div>
 
           <button class="btn" id="signupBtn">Create workspace</button>
-          <div class="state muted" id="signupState"></div>
+          <div class="state muted" id="signupState" aria-live="polite"></div>
           <div class="altDivider">OR</div>
           <button class="btnSecondary" type="button">Continue with Microsoft</button>
-          <p class="muted">This demo uses tenant + token (no password yet). Replace with real SSO when ready.</p>
+          <p class="muted">Phase 1 auth: organization + user signup with secure password hashing.</p>
         </div>
 
         <div id="signinForm" style="display:none">
-          <label for="tenantId">Tenant ID</label>
-          <input id="tenantId" placeholder="Paste tenant UUID here" />
-
           <label for="signinEmail">Your email</label>
-          <input id="signinEmail" placeholder="you@company.com" />
+          <input id="signinEmail" type="email" autocomplete="email" placeholder="you@company.com" />
+
+          <label for="signinPassword">Password</label>
+          <input id="signinPassword" type="password" autocomplete="current-password" placeholder="Enter your password" />
 
           <div class="metaRow">
             <label class="checkbox"><input type="checkbox" checked /> Remember me</label>
-            <a class="link" href="#">Forgot Password?</a>
+            <a class="link" href="#" data-forgot-password>Forgot Password?</a>
           </div>
 
           <button class="btn" id="signinBtn">Sign in</button>
-          <div class="state muted" id="signinState"></div>
+          <div class="state muted" id="signinState" aria-live="polite"></div>
           <div class="altDivider">OR</div>
           <button class="btnSecondary" type="button">Continue with Microsoft</button>
         </div>
-        <div class="foot">Copyright © Relayroom 2026</div>
-      </section>
+        </section>
+        <div class="foot">Back to <a class="link" style="color:#d8e5ff" href="/">landing</a> · Copyright © Relayroom 2026</div>
+      </div>
     </div>
 
     <script type="module">
@@ -285,14 +276,27 @@
       const signinForm = document.getElementById("signinForm");
 
       const orgName = document.getElementById("orgName");
+      const signupName = document.getElementById("signupName");
       const signupEmail = document.getElementById("signupEmail");
+      const signupPassword = document.getElementById("signupPassword");
       const signupBtn = document.getElementById("signupBtn");
       const signupState = document.getElementById("signupState");
 
-      const tenantId = document.getElementById("tenantId");
       const signinEmail = document.getElementById("signinEmail");
+      const signinPassword = document.getElementById("signinPassword");
       const signinBtn = document.getElementById("signinBtn");
       const signinState = document.getElementById("signinState");
+
+      document.querySelectorAll("[data-forgot-password]").forEach((el) => {
+        el.addEventListener("click", (e) => {
+          e.preventDefault();
+          const msg = "Forgot password is coming soon in Phase 2.";
+          signupState.textContent = msg;
+          signupState.className = "state warn";
+          signinState.textContent = msg;
+          signinState.className = "state warn";
+        });
+      });
 
       function show(tab) {
         if (tab === "signup") {
@@ -311,37 +315,28 @@
       tabSignup.onclick = () => show("signup");
       tabSignin.onclick = () => show("signin");
 
-      async function issueToken(tenantIdValue, subject) {
-        const res = await fetch("/api/auth/token", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ subject, tenantId: tenantIdValue, role: "commander" })
-        });
-        if (!res.ok) throw new Error("Token failed");
-        const data = await res.json();
-        return data.token;
-      }
-
       signupBtn.onclick = async () => {
         signupState.textContent = "Creating workspace...";
         signupState.className = "state muted";
         try {
-          const name = (orgName.value || "").trim() || "Relayroom Demo Co";
+          const organizationName = (orgName.value || "").trim() || "Relayroom Demo Co";
+          const fullName = (signupName.value || "").trim() || "Demo User";
           const email = (signupEmail.value || "").trim() || "demo.user@relayroom.dev";
-          const tenantRes = await fetch("/api/tenants", {
+          const password = (signupPassword.value || "").trim();
+          if (password.length < 8) throw new Error("Password should be at least 8 characters");
+          const signupRes = await fetch("/api/auth/signup", {
             method: "POST",
             headers: { "content-type": "application/json" },
-            body: JSON.stringify({ name })
+            body: JSON.stringify({ organizationName, fullName, email, password })
           });
-          if (!tenantRes.ok) throw new Error("Tenant create failed");
-          const tenant = await tenantRes.json();
-          const token = await issueToken(tenant.id, email);
-          localStorage.setItem("relayroomTenantId", tenant.id);
-          localStorage.setItem("relayroomToken", token);
-          signupState.innerHTML = `<span class="ok">Workspace created.</span> Tenant ID: <code>${tenant.id}</code>. Redirecting…`;
+          if (!signupRes.ok) throw new Error("Signup failed");
+          const payload = await signupRes.json();
+          localStorage.setItem("relayroomTenantId", payload.tenant.id);
+          localStorage.setItem("relayroomToken", payload.token);
+          signupState.innerHTML = `<span class="ok">Workspace created.</span> Tenant ID: <code>${payload.tenant.id}</code>. Redirecting...`;
           setTimeout(() => (window.location.href = "/app"), 600);
         } catch (e) {
-          signupState.textContent = "Signup failed. Check server is running.";
+          signupState.textContent = e instanceof Error ? e.message : "Signup failed. Check server and database.";
           signupState.className = "state warn";
         }
       };
@@ -350,16 +345,22 @@
         signinState.textContent = "Signing in...";
         signinState.className = "state muted";
         try {
-          const tid = (tenantId.value || "").trim();
           const email = (signinEmail.value || "").trim() || "demo.user@relayroom.dev";
-          if (!tid) throw new Error("Missing tenant id");
-          const token = await issueToken(tid, email);
-          localStorage.setItem("relayroomTenantId", tid);
-          localStorage.setItem("relayroomToken", token);
-          signinState.innerHTML = `<span class="ok">Signed in.</span> Redirecting…`;
+          const password = (signinPassword.value || "").trim();
+          if (!password) throw new Error("Password is required");
+          const loginRes = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ email, password })
+          });
+          if (!loginRes.ok) throw new Error("Invalid email or password");
+          const payload = await loginRes.json();
+          localStorage.setItem("relayroomTenantId", payload.tenant.id);
+          localStorage.setItem("relayroomToken", payload.token);
+          signinState.innerHTML = `<span class="ok">Signed in.</span> Redirecting...`;
           setTimeout(() => (window.location.href = "/app"), 500);
-        } catch {
-          signinState.textContent = "Sign in failed. Check Tenant ID and server.";
+        } catch (e) {
+          signinState.textContent = e instanceof Error ? e.message : "Sign in failed.";
           signinState.className = "state warn";
         }
       };

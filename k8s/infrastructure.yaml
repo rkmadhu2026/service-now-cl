@@ -1,0 +1,127 @@
+# Redis + Postgres for relayroom namespace. Apply: kubectl apply -f k8s/infrastructure.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: relayroom
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: relayroom-postgres
+  namespace: relayroom
+stringData:
+  POSTGRES_USER: relayroom
+  POSTGRES_PASSWORD: relayroom
+  POSTGRES_DB: relayroom
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: relayroom-postgres-pvc
+  namespace: relayroom
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: relayroom-postgres
+  namespace: relayroom
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: relayroom-postgres
+  template:
+    metadata:
+      labels:
+        app: relayroom-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: relayroom-postgres
+          env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+          resources:
+            requests:
+              cpu: 50m
+              memory: 256Mi
+            limits:
+              memory: 512Mi
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: relayroom-postgres-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: relayroom
+spec:
+  selector:
+    app: relayroom-postgres
+  ports:
+    - name: pg
+      port: 5432
+      targetPort: 5432
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: relayroom-redis
+  namespace: relayroom
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: relayroom-redis
+  template:
+    metadata:
+      labels:
+        app: relayroom-redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:7-alpine
+          ports:
+            - containerPort: 6379
+          args: ["redis-server", "--appendonly", "yes"]
+          resources:
+            requests:
+              cpu: 25m
+              memory: 64Mi
+            limits:
+              memory: 256Mi
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  namespace: relayroom
+spec:
+  selector:
+    app: relayroom-redis
+  ports:
+    - name: redis
+      port: 6379
+      targetPort: 6379

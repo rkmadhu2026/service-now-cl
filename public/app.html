@@ -9,15 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <style>
       :root {
-        --bg: #f2f6ff;
+        --bg: #f5f8fd;
         --surface: #ffffff;
-        --surface-soft: #f6f9ff;
-        --border: #d4dded;
-        --text: #12213a;
-        --muted: #5e7492;
-        --brand: #2563eb;
-        --brand-strong: #1d4ed8;
-        --brand-soft: #e8efff;
+        --surface-soft: #f6f8fc;
+        --border: #d8e0ef;
+        --text: #101f3a;
+        --muted: #5f6f8f;
+        --brand: #0f62fe;
+        --brand-strong: #0b53d8;
+        --brand-soft: #e8f0ff;
         --ok: #0f7a42;
         --warn: #b87100;
         --danger: #a53030;
@@ -29,8 +29,8 @@
         margin: 0;
         font-family: "Outfit", sans-serif;
         background:
-          radial-gradient(circle at 10% -20%, #dcebff 0%, transparent 40%),
-          radial-gradient(circle at 90% -10%, #e9e8ff 0%, transparent 34%),
+          radial-gradient(circle at 10% -20%, rgba(15, 98, 254, 0.2) 0%, transparent 40%),
+          radial-gradient(circle at 90% -10%, rgba(40, 199, 122, 0.12) 0%, transparent 34%),
           var(--bg);
         color: var(--text);
       }
@@ -40,7 +40,7 @@
         padding: 24px;
       }
       .topbar {
-        background: linear-gradient(135deg, #132845, #1d4d8e 55%, #2563eb);
+        background: linear-gradient(135deg, #11284c, #16478c 55%, #0f62fe);
         color: #fff;
         border-radius: 18px;
         padding: 20px;
@@ -127,7 +127,7 @@
       }
       .nav button.active {
         background: var(--brand-soft);
-        border-color: #9ab9ff;
+        border-color: #aac0f3;
         color: var(--brand-strong);
       }
       .workspaceMeta {
@@ -162,13 +162,13 @@
       }
       input:focus,
       select:focus {
-        outline: 2px solid #c2d8ff;
-        border-color: #9ebfff;
+        outline: 2px solid #c8d7ff;
+        border-color: #97b3f5;
       }
       .btn {
-        border: 1px solid #abcff4;
-        background: var(--brand-soft);
-        color: #0d4d90;
+        border: 1px solid #b7c8e7;
+        background: var(--surface-soft);
+        color: #223a62;
         border-radius: 10px;
         padding: 9px 12px;
         font-weight: 700;
@@ -193,9 +193,9 @@
         cursor: pointer;
       }
       .incidentItem.active {
-        background: #edf3ff;
-        border-color: #89affc;
-        box-shadow: 0 0 0 2px #d5e4ff inset;
+        background: #eaf1ff;
+        border-color: #95b2ee;
+        box-shadow: 0 0 0 2px #d8e4fb inset;
       }
       .incidentTitle {
         font-weight: 700;
@@ -320,7 +320,7 @@
           <div id="authState" class="row muted">Token: -</div>
           <hr />
           <div class="navTitle">Demo actions</div>
-          <button id="createTenant" class="btn">Create Demo Tenant</button>
+          <button id="createTenant" class="btn">Create workspace</button>
           <button id="triggerSev1" class="btn primary">Trigger Sev-1</button>
           <button id="refreshPanel" class="btn">Refresh</button>
           <div id="actionState" class="row muted">Waiting for action.</div>
@@ -402,7 +402,7 @@
         tenantState.textContent = tenantId ? `Tenant: ${tenantId}` : "Tenant: -";
         authState.textContent = token ? "Token: present" : "Token: -";
         if (!token) {
-          setAction("Not logged in. Go to /auth to sign in.", "warn");
+          setAction("Not logged in. Use 'Create workspace' or go to /auth.", "warn");
         }
       }
 
@@ -419,20 +419,49 @@
       }
 
       async function createTenant() {
-        setAction("Creating demo tenant...");
-        const res = await fetch("/api/tenants", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ name: "Relayroom Demo Co" })
-        });
-        if (!res.ok) return setAction("Tenant creation failed.", "warn");
-        const data = await res.json();
-        tenantId = data.id;
-        localStorage.setItem("relayroomTenantId", tenantId);
-        await issueToken("demo.user");
-        renderSession();
-        setAction("Tenant and token created.", "ok");
-        await refresh();
+        // Prefer Phase 1 password signup when Prisma is enabled; fallback to legacy demo flow.
+        setAction("Creating workspace...");
+        const organizationName = "Relayroom Demo Operations";
+        const fullName = "Demo User";
+        const email = `demo+${Math.floor(Math.random() * 100000)}@relayroom.dev`;
+        const password = `DemoPass!${Math.floor(Math.random() * 100000)}`;
+
+        try {
+          const signupRes = await fetch("/api/auth/signup", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ organizationName, fullName, email, password })
+          });
+
+          // If DB isn't configured (USE_PRISMA=false), server returns 501.
+          if (signupRes.status === 501) throw new Error("Phase1 disabled; falling back to legacy demo flow.");
+
+          if (!signupRes.ok) return setAction("Workspace signup failed.", "warn");
+          const payload = await signupRes.json();
+          tenantId = payload.tenant.id;
+          token = payload.token;
+          localStorage.setItem("relayroomTenantId", tenantId);
+          localStorage.setItem("relayroomToken", token);
+          renderSession();
+          setAction("Workspace created (Phase 1 auth).", "ok");
+          await refresh();
+          return;
+        } catch {
+          // Legacy demo flow: create tenant + mint token (works without Prisma).
+          const res = await fetch("/api/tenants", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ name: "Relayroom Demo Co" })
+          });
+          if (!res.ok) return setAction("Tenant creation failed.", "warn");
+          const data = await res.json();
+          tenantId = data.id;
+          localStorage.setItem("relayroomTenantId", tenantId);
+          await issueToken("demo.user");
+          renderSession();
+          setAction("Workspace created (legacy demo).", "ok");
+          await refresh();
+        }
       }
 
       async function triggerSev1() {
@@ -474,6 +503,10 @@
 
       function renderQueue() {
         list.innerHTML = "";
+        if (!token) {
+          list.innerHTML = `<div class="card muted">Sign in at /auth to view incidents.</div>`;
+          return;
+        }
         const query = searchInput.value.trim().toLowerCase();
         const sev = severityFilter.value;
 
@@ -559,7 +592,9 @@
 
       document.getElementById("logout").onclick = () => {
         localStorage.removeItem("relayroomToken");
+        localStorage.removeItem("relayroomTenantId");
         token = "";
+        tenantId = "";
         renderSession();
       };
       document.getElementById("createTenant").onclick = createTenant;

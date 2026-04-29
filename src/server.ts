@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import { z } from "zod";
 import { requireAuth, signAccessToken } from "./auth.js";
 import { config } from "./config.js";
+import { hashPassword, verifyPassword } from "./password.js";
 import { createQueue } from "./queue.js";
 import { getPrismaClient } from "./prisma.js";
 import { PrismaStore } from "./prisma-store.js";
@@ -20,7 +21,8 @@ const tenantHeaderSchema = z.string().uuid();
 
 export function buildServer() {
   const app = express();
-  const store = config.usePrisma ? new PrismaStore(getPrismaClient()) : new InMemoryStore();
+  const prisma = config.usePrisma ? getPrismaClient() : undefined;
+  const store = config.usePrisma ? new PrismaStore(prisma!) : new InMemoryStore();
   const service = new RelayroomService(store);
   const queue = createQueue(config.redisUrl, service);
   service.setQueuePublisher((job) => queue.add(job));
@@ -56,6 +58,73 @@ export function buildServer() {
       role: parsed.data.role
     });
     return res.json({ token });
+  });
+
+  app.post("/api/auth/signup", async (req, res) => {
+    if (!prisma) return res.status(501).json({ error: "Signup requires USE_PRISMA=true" });
+    const bodySchema = z.object({
+      organizationName: z.string().min(2),
+      fullName: z.string().min(2),
+      email: z.string().email(),
+      password: z.string().min(8).max(128)
+    });
+    const parsed = bodySchema.safeParse(req.body);
+    if (!parsed.success) return res.status(400).json({ error: parsed.error.flatten() });
+    const email = parsed.data.email.toLowerCase();
+    const existing = await prisma.user.findUnique({ where: { email } });
+    if (existing) return res.status(409).json({ error: "User already exists" });
+
+    const passwordHash = await hashPassword(parsed.data.password);
+    const created = await prisma.$transaction(async (tx) => {
+      const tenant = await tx.tenant.create({ data: { name: parsed.data.organizationName } });
+      const user = await tx.user.create({
+        data: {
+          tenantId: tenant.id,
+          email,
+          name: parsed.data.fullName,
+          passwordHash,
+          role: "admin"
+        }
+      });
+      return { tenant, user };
+    });
+
+    const token = signAccessToken({
+      sub: created.user.email,
+      tenantId: created.tenant.id,
+      role: "admin"
+    });
+    return res.status(201).json({
+      token,
+      user: { id: created.user.id, email: created.user.email, fullName: created.user.name, role: created.user.role },
+      tenant: { id: created.tenant.id, name: created.tenant.name }
+    });
+  });
+
+  app.post("/api/auth/login", async (req, res) => {
+    if (!prisma) return res.status(501).json({ error: "Login requires USE_PRISMA=true" });
+    const bodySchema = z.object({
+      email: z.string().email(),
+      password: z.string().min(8).max(128)
+    });
+    const parsed = bodySchema.safeParse(req.body);
+    if (!parsed.success) return res.status(400).json({ error: parsed.error.flatten() });
+    const email = parsed.data.email.toLowerCase();
+
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user || !(await verifyPassword(parsed.data.password, user.passwordHash))) {
+      return res.status(401).json({ error: "Invalid email or password" });
+    }
+
+    // No lastLoginAt column yet in this database. We keep auth response lightweight.
+
+    const role = user.role as "admin" | "commander" | "responder" | "observer";
+    const token = signAccessToken({ sub: user.email, tenantId: user.tenantId, role });
+    return res.json({
+      token,
+      user: { id: user.id, email: user.email, fullName: user.name, role: user.role },
+      tenant: { id: user.tenantId }
+    });
   });
 
   app.post("/api/tenants", async (req, res) => {

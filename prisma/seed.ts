@@ -16,7 +16,9 @@ async function main() {
   const incidentId = uuid();
   const roomId = uuid();
 
-  await prisma.incident.create({
+  // Create the incident first (without roomId) so FK constraints are satisfied,
+  // then create the room, then link the incident back to the room.
+  const incident = await prisma.incident.create({
     data: {
       id: incidentId,
       tenantId: tenant.id,
@@ -26,7 +28,7 @@ async function main() {
       severity: "sev1",
       phase: "mitigating",
       elapsedMinutes: 18,
-      roomId
+      roomId: null
     }
   });
 
@@ -34,7 +36,7 @@ async function main() {
     data: {
       id: roomId,
       tenantId: tenant.id,
-      incidentId,
+      incidentId: incident.id,
       roles: {
         incident_commander: "ic@relayroom.dev",
         comms_lead: "comms@relayroom.dev",
@@ -46,6 +48,11 @@ async function main() {
       latestHypothesis: "Recent deployment increased DB connection churn.",
       mitigationPlan: "Rollback + cache warm-up + synthetic verification."
     }
+  });
+
+  await prisma.incident.update({
+    where: { id: incident.id },
+    data: { roomId }
   });
 
   await prisma.timelineEvent.createMany({

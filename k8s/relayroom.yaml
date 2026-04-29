@@ -10,7 +10,7 @@ metadata:
   namespace: relayroom
 data:
   PORT: "4000"
-  USE_PRISMA: "false"
+  USE_PRISMA: "true"
   REDIS_URL: "redis://redis:6379"
 ---
 apiVersion: v1
@@ -40,6 +40,17 @@ spec:
       labels:
         app: relayroom-api
     spec:
+      initContainers:
+        - name: db-migrate
+          image: relayroom:latest
+          imagePullPolicy: IfNotPresent
+          workingDir: /app
+          command: ["node", "node_modules/prisma/build/index.js", "migrate", "deploy"]
+          envFrom:
+            - configMapRef:
+                name: relayroom-config
+            - secretRef:
+                name: relayroom-secrets
       containers:
         - name: relayroom-api
           image: relayroom:latest

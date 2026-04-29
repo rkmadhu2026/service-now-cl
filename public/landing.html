@@ -9,17 +9,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <style>
       :root {
-        --ink-950: #070b15;
-        --ink-900: #0e172a;
-        --ink-700: #1b2a48;
-        --slate-100: #edf2fb;
-        --slate-200: #dfe7f5;
-        --slate-300: #c4d1e8;
-        --slate-500: #5b6e8e;
+        --ink-950: #0b1220;
+        --ink-900: #111a2e;
+        --ink-700: #243554;
+        --slate-100: #eef3fb;
+        --slate-200: #e2e9f5;
+        --slate-300: #d2dced;
+        --slate-500: #5f6f8f;
         --white: #ffffff;
-        --brand: #1f6fff;
-        --brand-soft: #e6efff;
-        --mint: #34d3a2;
+        --brand: #0f62fe;
+        --brand-soft: #e8f0ff;
+        --mint: #28c77a;
       }
       * {
         box-sizing: border-box;
@@ -27,8 +27,8 @@
       body {
         margin: 0;
         font-family: "Outfit", sans-serif;
-        color: #15233e;
-        background: #f4f7fd;
+        color: #101f3a;
+        background: #f5f8fd;
       }
       .container {
         width: min(1160px, calc(100% - 32px));
@@ -36,8 +36,8 @@
       }
       .heroWrap {
         background:
-          radial-gradient(900px 380px at 5% -20%, rgba(52, 211, 162, 0.25), transparent 70%),
-          radial-gradient(760px 340px at 100% -25%, rgba(31, 111, 255, 0.32), transparent 70%),
+          radial-gradient(900px 380px at 5% -20%, rgba(15, 98, 254, 0.28), transparent 70%),
+          radial-gradient(760px 340px at 100% -25%, rgba(40, 199, 122, 0.18), transparent 70%),
           var(--ink-950);
         color: #edf4ff;
         padding: 18px 0 34px;
@@ -59,6 +59,12 @@
         gap: 10px;
         align-items: center;
       }
+      .navTextLink {
+        color: #d8e5fb;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+      }
       .btn {
         display: inline-block;
         text-decoration: none;
@@ -70,7 +76,7 @@
       }
       .btn.primary {
         border-color: transparent;
-        background: linear-gradient(135deg, #2e7eff, #5796ff);
+        background: linear-gradient(135deg, #0f62fe, #3a83ff);
       }
       .hero {
         display: grid;
@@ -86,7 +92,7 @@
         letter-spacing: -0.04em;
       }
       .hero p {
-        color: #b9cae7;
+        color: #c2d2ec;
         font-size: 17px;
         line-height: 1.55;
         margin: 14px 0 0;
@@ -112,7 +118,7 @@
         font-size: 12px;
         text-transform: uppercase;
         letter-spacing: 0.12em;
-        color: #a5c4ff;
+        color: #b6ccff;
       }
       .metricGrid {
         margin-top: 10px;
@@ -142,7 +148,7 @@
         padding-top: 14px;
       }
       .trustedLabel {
-        color: #8fa8cc;
+        color: #9fb3d4;
         font-size: 12px;
         text-transform: uppercase;
         letter-spacing: 0.1em;
@@ -162,6 +168,7 @@
       }
       .section {
         padding: 36px 0 0;
+        scroll-margin-top: 84px;
       }
       .section h2 {
         margin: 0;
@@ -294,6 +301,7 @@
         <div class="nav">
           <div class="logo">Relayroom</div>
           <div class="navLinks">
+            <a class="navTextLink" href="#use-cases">Use Cases</a>
             <a class="btn ghost" href="/app">Open app</a>
             <a class="btn primary" href="/auth">Start free trial</a>
           </div>
@@ -376,6 +384,40 @@
           <article class="card">
             <h3>Alert quality controls</h3>
             <p>Deduplicate events and suppress non-critical channels during low-severity incidents.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="use-cases">
+        <h2>Core use cases</h2>
+        <p class="sectionLead">
+          Relayroom supports incident operations from first alert to post-incident follow-up, for both
+          engineering teams and business stakeholders.
+        </p>
+        <div class="cards">
+          <article class="card">
+            <h3>Major incident command center</h3>
+            <p>Run Sev-1 and Sev-2 incidents in one workspace with live queue, action context, and response state.</p>
+          </article>
+          <article class="card">
+            <h3>ServiceNow-driven orchestration</h3>
+            <p>Convert ServiceNow webhooks into response rooms, role assignments, and operational timelines.</p>
+          </article>
+          <article class="card">
+            <h3>Stakeholder communication</h3>
+            <p>Generate audience-specific updates for executives, customers, and internal teams from one source.</p>
+          </article>
+          <article class="card">
+            <h3>Post-incident evidence capture</h3>
+            <p>Preserve timeline events, decisions, and artifacts for postmortems and compliance evidence.</p>
+          </article>
+          <article class="card">
+            <h3>Multi-tenant SaaS operations</h3>
+            <p>Isolate organizations by tenant with secure auth and workspace-level data boundaries.</p>
+          </article>
+          <article class="card">
+            <h3>Demo to production rollout</h3>
+            <p>Start with local demo mode, then graduate to password auth, Prisma persistence, and Kubernetes.</p>
           </article>
         </div>
       </section>
